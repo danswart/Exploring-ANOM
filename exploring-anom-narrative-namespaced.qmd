@@ -1,0 +1,975 @@
+---
+title: "When Two Numbers are Different Does It Prove Injustice?"
+subtitle: "Understanding Group Differences: A Visual Story"
+description: ""
+authors: 
+  - name: "Dan Swart, CPA (ret)"
+  - name: "Claude Sonnet 4.5"
+date: today
+date-format: long
+# bibliography: manual-refs.bib
+format:
+  html:
+    resources:
+      - reference-backlinks.js
+    include-after-body:    
+      - text: |
+          # <script type="text/javascript" src="reference-backlinks.js"></script>
+    default: true         
+    code-copy: true
+    code-link: true        # This adds individual buttons
+    code-fold: true        # Hide code by default, show on click
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-block-bg: "#FAEBD7"
+    code-block-border-left: "#31BAE9"
+    embed-resources: true
+    include-in-header: header.html
+    css:
+      - swart.css
+      - tachyons.min.css
+      - r-colors.css
+    fontsize: 18pt
+    lightbox: true
+    page-layout: full
+    fig-width: 12
+    fig-height: 10
+    fig-dpi: 300
+    html-math-method: katex
+    df-print: paged
+    toc: true
+    toc-float: true
+    citeproc: true
+    link-citations: true
+    linestretch: 1.0
+    
+    
+    
+  typst:
+    fig-width: 12
+    fig-height: 10
+    fig-dpi: 300
+    margin:
+      x: 1in
+      y: 1in
+    toc: true
+    fontsize: 14pt
+    mainfont: "Cabin"
+    
+  revealjs:
+    slide-number: true
+    transition: fade
+    code-overflow: wrap
+    center: true
+    smaller: true
+    scrollable: true
+    chalkboard: true
+    multiplex: false
+    theme: solarized
+    reference-location: margin
+    logo: img/red-cross-640-435.png
+    footer: "Footer text"
+    code-block-height: 650px
+
+
+
+  # docx:
+  #   highlight-style: github
+  #   fig_caption: true
+
+
+
+editor: source
+
+quarto:
+  render:
+    cache-refresh: true
+
+
+# for .qmd filesd
+execute:
+  echo: false
+  message: false
+  warning: false
+  eval: true
+  fig-width: 12
+  fig-height: 10
+
+
+# for .rmd files
+knitr:
+  opts_chunk:
+    echo: false
+    error: false
+    warning: false
+    message: false
+    cache: false
+
+---
+
+
+```{r}
+#| label: setup
+#| include: false
+# R version 4.4.3 (2025-02-28)
+# Platform: x86_64-apple-darwin20
+# Running under: macOS Sequoia 15.6.1
+# Rstudio 2025.9.2.418 (Cucumberleaf Sunflower)
+# 
+
+# Prevent scientific notation globally
+options(scipen = 999)
+options(device = "quartz")  # macOS native graphics device
+options(tigris_use_cache = TRUE)
+
+# install.packages(c("mapview", "survey", "srvyr", "arcgislayers"))
+
+# census_api_key("95496766c51541ee6f402c1e1a8658581285b759", install = TRUE, overwrite = TRUE)
+
+
+# load libraries
+
+# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
+# library(tibble) # Simple Data Frames
+# library(tidyr) # Tidy Messy Data
+# library(readr) # Read Rectangular Text Data
+# library(purrr) # Functional Programming Tools
+# library(dplyr) # A Grammar of Data Manipulation
+# library(stringr) # Simple, Consistent Wrappers for Common String Operations
+# library(forcats) # Tools for Working with Categorical Variables (Factors)
+# library(lubridate) # Make Dealing with Dates a Little Easier
+# library(readxl) # Read Excel Files
+# library(writexl) # Export Data Frames to Excel 'xlsx' Format 
+# library(janitor) # Simple Tools for Examining and Cleaning Dirty Data 
+# library(ggtext) # Improved Text Rendering Support for 'ggplot2' 
+# library(paletteer) # Comprehensive Collection of Color Palettes 
+# library(viridis) # Colorblind-Friendly Color Maps for R 
+# library(RColorBrewer) # ColorBrewer Palettes 
+# library(wesanderson) # A Wes Anderson Palette Generator 
+# library(dutchmasters) # Color Palettes based on Famous Paintings 
+# library(gghighlight) # Highlight Lines and Points in 'ggplot2' 
+# library(monochromeR) # Easily Create, View and Use Monochrome Color Palettes 
+# library(ggforce) # Accelerating 'ggplot2' 
+# library(ggthemes) # Extra Themes, Scales and Geoms for 'ggplot2'
+# library(gt) # Easily Create Presentation-Ready Display Tables
+# library(gtExtras) # Extending 'gt' for Beautiful HTML Tables
+# library(plotly) # Create Interactive Web Graphics via 'plotly.js'
+# library(patchwork) # The Composer of Plots
+# library(ppcor) # Partial and Semi-Partial (Part) Correlation
+# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
+# library(corrplot) # Visualization of a Correlation Matrix
+# library(ggcorrplot) # Visualization of a Correlation Matrix using 'ggplot2'
+# library(car) # Companion to Applied Regression
+# library(WRS2) # A Collection of Robust Statistical Methods
+# library(boot) # Bootstrap Functions
+# library(BayesFactor) # Computation of Bayes Factors for Common Designs
+# library(pwr) # Basic Functions for Power Analysis
+# library(qgraph) # Graph Plotting Methods, Psychometric Data Visualization and Graphical Model Estimation
+# library(scales) # Scale Functions for Visualization
+# library(here) # A Simpler Way to Find Your Files
+# library(ggdag) # Analyze and Create Elegant Directed Acyclic Graphs      
+# library(dagitty) # Graphical Analysis of Structural Causal Models    
+# library(DiagrammeR) # Graph/Network Visualization 
+# library(knitr) # A General-Purpose Package for Dynamic Report Generation in R     
+# library(kableExtra) # Construct Complex Table with 'kable' and Pipe Syntax
+# library(flextable) # Functions for Tabular Reporting  
+# library(lavaan) # Latent Variable Analysis     
+# library(ggpubr) # 'ggplot2' Based Publication Ready Plots
+# library(rethinking) # Statistical Rethinking book package
+# library(broom) # Convert Statistical Objects into Tidy Tibbles
+# library(tidycensus) # Load US Census Boundary and Attribute Data as 'tidyverse' and 'sf'-Ready Data Frames
+
+
+# Force dplyr's select to take precedence
+select <- dplyr::select
+filter <- dplyr::filter
+
+# Set global theme for consistent plots
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 20) + 
+                   ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
+                                                                      size = 26),
+                                  plot.subtitle = ggplot2::element_text(face = "bold",
+                                                                         size = 24),
+                                  axis.title.x = ggplot2::element_text(face = "bold",
+                                                                        size = 22),
+                                  axis.title.y = ggplot2::element_text(face = "bold",
+                                                                        size = 22),
+                                  axis.text.x = ggplot2::element_text(face = "bold",
+                                                                       size = 22,
+                                                                       angle = 45,
+                                                                       hjust = 1),
+                                  legend.position = "bottom",
+                                  strip.text = ggplot2::element_text(face = "bold"),
+                                  panel.spacing.x = grid::unit(1.5,
+                                                                "cm"),
+                                  panel.spacing.y = grid::unit(1.5,
+                                                                "cm"),
+                                  plot.margin = ggplot2::margin(20,
+                                                                 20,
+                                                                 20,
+                                                                 20,
+                                                                 "pt")))
+
+
+# Set seed for reproducibility
+set.seed(123)
+
+```
+
+
+
+# The Story Begins: Two Schools, One Question
+
+Imagine you're a school principal looking at test scores from two schools in your district: 
+
+- **Westside School** (where mostly boys attend): Average score of 78.5
+- **Eastside School** (where mostly girls attend): Average score of 80.2
+
+**The Big Question**: Is Eastside really performing better, or is this difference just due to random chance?
+
+This might seem like a simple question, but there's a lot hiding beneath the surface. Let's explore what's really going on with these numbers.
+
+<br>
+
+# What Do These "Averages" Actually Look Like?
+
+Let's see what these test scores actually look like when we plot them side-by-side.  Are they really that different from each other?  Is there significant overlap of performance between the two schools?
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-height: 8
+
+# Set parameters for our story
+westside_mean <- 78.5
+westside_sd <- 12.3
+eastside_mean <- 80.2
+eastside_sd <- 11.6
+n_students <- 500
+
+# Generate actual student scores for visualization
+westside_scores <- stats::rnorm(n = n_students,
+                                mean = westside_mean,
+                                sd = westside_sd)
+eastside_scores <- stats::rnorm(n = n_students,
+                                mean = eastside_mean,
+                                sd = eastside_sd)
+
+# Create a data frame for plotting
+scores_df <- data.frame(
+  score = c(westside_scores, eastside_scores),
+  school = rep(c("Westside School", "Eastside School"),
+               each = n_students))
+
+# Create overlapping density plot
+ggplot2::ggplot(data = scores_df,
+                mapping = ggplot2::aes(x = score,
+                                       fill = school,
+                                       color = school)) +
+  ggplot2::geom_density(alpha = 0.3,
+                        linewidth = 1.5) +
+  ggplot2::geom_vline(xintercept = westside_mean,
+                      color = "#F8766D",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::geom_vline(xintercept = eastside_mean,
+                      color = "#00BFC4",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::annotate(geom = "text",
+                    x = westside_mean - 5,
+                    y = 0.030,
+                    label = paste("Westside\nAverage:", westside_mean),
+                    size = 5,
+                    color = "#F8766D",
+                    fontface = "bold") +
+  ggplot2::annotate(geom = "text",
+                    x = eastside_mean + 5,
+                    y = 0.030,
+                    label = paste("Eastside\nAverage:", eastside_mean),
+                    size = 5,
+                    color = "#00BFC4",
+                    fontface = "bold") +
+  ggplot2::labs(
+    title = "What the Test Scores Really Look Like",
+    subtitle = "Notice how much the two schools overlap!",
+    x = "Test Score",
+    y = "Number of Students (density)",
+    fill = "School",
+    color = "School") +
+  ggplot2::theme(legend.position = "top")
+
+```
+
+<br>
+
+**What This Picture Shows**:
+
+Look at how much these two curves overlap! Even though Eastside has a slightly higher average (80.2 vs 78.5), there are TONS of Westside students scoring higher than TONS of Eastside students. In fact, about 94% of the scores overlap between the two schools.
+
+<u>This is the first important lesson</u>: ***A difference in group averages doesn't mean the groups are actually different from each other***.
+
+<br>
+
+# The Analysis of Means (ANOM) Approach
+
+Now let's use a statistical tool called "Analysis of Means" to figure out if the 1.7-point difference between schools is "real" or just random variation.
+
+Think of it this way: If you flipped a coin 10 times and got 6 heads and 4 tails, would you say the coin is "unfair"? Probably not - that's pretty close to 50/50. But if you got 9 heads and 1 tail, you'd be suspicious, right?
+
+ANOM works the same way. It creates "decision limits" (like boundaries) around the overall average. If a school's average falls outside these boundaries, we say it's significantly different.
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Calculate overall average across both schools
+overall_n <- n_students * 2
+overall_mean <- (westside_mean * n_students + eastside_mean * n_students) / overall_n
+
+# Calculate pooled standard deviation
+pooled_sd <- sqrt(((n_students - 1) * westside_sd^2 + 
+                   (n_students - 1) * eastside_sd^2) /
+                  (n_students * 2 - 2))
+
+# Calculate critical value
+alpha <- 0.05
+critical_value <- stats::qt(1 - alpha / 2,
+                            df = n_students * 2 - 2)
+
+# Calculate decision limits
+upper_limit <- overall_mean + critical_value * pooled_sd * 
+  sqrt(1 / n_students + 1 / n_students)
+lower_limit <- overall_mean - critical_value * pooled_sd * 
+  sqrt(1 / n_students + 1 / n_students)
+
+# Create data frame for ANOM plot
+anom_df <- data.frame(
+  school = c("Westside School", "Eastside School"),
+  mean = c(westside_mean, eastside_mean),
+  n = c(n_students, n_students))
+
+anom_df$significant <- (anom_df$mean > upper_limit) | 
+  (anom_df$mean < lower_limit)
+
+# Create ANOM plot
+ggplot2::ggplot(data = anom_df,
+                mapping = ggplot2::aes(x = school,
+                                       y = mean,
+                                       color = significant)) +
+  ggplot2::geom_point(size = 6) +
+  ggplot2::geom_hline(yintercept = overall_mean,
+                      linetype = "solid",
+                      linewidth = 1.5) +
+  ggplot2::geom_hline(yintercept = upper_limit,
+                      linetype = "dashed",
+                      linewidth = 1.5,
+                      color = "red") +
+  ggplot2::geom_hline(yintercept = lower_limit,
+                      linetype = "dashed",
+                      linewidth = 1.5,
+                      color = "red") +
+  ggplot2::annotate(geom = "text",
+                    x = 1.5,
+                    y = overall_mean + 0.5,
+                    label = paste("District Average =", round(overall_mean, 1)),
+                    size = 6,
+                    fontface = "bold") +
+  ggplot2::annotate(geom = "text",
+                    x = 1.5,
+                    y = upper_limit + 0.5,
+                    label = "If above this line,\nschool is SIGNIFICANTLY better",
+                    size = 5,
+                    color = "red") +
+  ggplot2::annotate(geom = "text",
+                    x = 1.5,
+                    y = lower_limit - 0.5,
+                    label = "If below this line,\nschool is SIGNIFICANTLY worse",
+                    size = 5,
+                    color = "red") +
+  ggplot2::scale_color_manual(values = c("black", "red")) +
+  ggplot2::labs(
+    title = "Are These Schools Really Different?",
+    subtitle = "Both schools are between the red lines, so NO significant difference",
+    y = "Average Test Score",
+    x = "") +
+  ggplot2::theme(legend.position = "none",
+                 axis.text.x = ggplot2::element_text(angle = 0))
+
+```
+
+<br>
+
+**The Verdict**: Both schools fall between the red dashed lines (the decision limits). This means the 1.7-point difference is small enough that it could easily happen by random chance. We can't say Eastside is truly performing better.
+
+<br>
+
+```{r}
+#| echo: false
+#| warning: false
+
+cohens_d <- (eastside_mean - westside_mean) / pooled_sd
+overlap_pct <- 2 * stats::pnorm(-abs(cohens_d) / 2) * 100
+
+results_df <- data.frame(
+  "What We're Looking At" = c(
+    "District Average",
+    "Westside Average",
+    "Eastside Average",
+    "Difference",
+    "Upper Decision Limit",
+    "Lower Decision Limit",
+    "Percent of Scores That Overlap",
+    "Is the difference significant?"),
+  "The Numbers" = c(
+    round(overall_mean, 1),
+    westside_mean,
+    eastside_mean,
+    round(eastside_mean - westside_mean, 1),
+    round(upper_limit, 1),
+    round(lower_limit, 1),
+    paste0(round(overlap_pct, 0), "%"),
+    "NO - Too small to be sure it's real"))
+
+results_df |>
+  flextable::flextable() |>
+  flextable::set_header_labels(
+    What.We.re.Looking.At = "What We're Looking At",
+    The.Numbers = "The Numbers") |>
+  flextable::theme_booktabs() |>
+  flextable::width(j = 1, width = 3) |>
+  flextable::width(j = 2, width = 2) |>
+  flextable::align(align = "left", part = "all") |>
+  flextable::bold(part = "header") |>
+  flextable::bg(i = 8, bg = "#FFE4B5", part = "body") |>
+  flextable::bold(i = 8, part = "body")
+
+```
+
+<br>
+
+# The Power Question: How Big Does a Difference Need to Be?
+
+Here's where things get interesting. Let's explore three different scenarios to understand what it takes for our test to detect a "real" difference.
+
+<br>
+
+## Scenario 1: Tiny Difference (Like Finding a Needle in a Haystack)
+
+Let's say Eastside's average was only 0.1 points higher than Westside's. What would that look like?
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-height: 8
+
+# Scenario 1: Very small difference
+west_mean_s1 <- 78.5
+east_mean_s1 <- 78.6  # Only 0.1 difference!
+sd_both_s1 <- 12.0
+
+# Generate scores
+west_scores_s1 <- stats::rnorm(n = n_students,
+                               mean = west_mean_s1,
+                               sd = sd_both_s1)
+east_scores_s1 <- stats::rnorm(n = n_students,
+                               mean = east_mean_s1,
+                               sd = sd_both_s1)
+
+scores_s1 <- data.frame(
+  score = c(west_scores_s1, east_scores_s1),
+  school = rep(c("Westside", "Eastside"),
+               each = n_students))
+
+# Plot
+ggplot2::ggplot(data = scores_s1,
+                mapping = ggplot2::aes(x = score,
+                                       fill = school,
+                                       color = school)) +
+  ggplot2::geom_density(alpha = 0.3,
+                        linewidth = 1.5) +
+  ggplot2::geom_vline(xintercept = west_mean_s1,
+                      color = "#F8766D",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::geom_vline(xintercept = east_mean_s1,
+                      color = "#00BFC4",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::labs(
+    title = "Scenario 1: Tiny 0.1-Point Difference",
+    subtitle = "The curves are almost identical - these look like the SAME group!",
+    x = "Test Score",
+    y = "Number of Students",
+    fill = "School",
+    color = "School") +
+  ggplot2::theme(legend.position = "top")
+
+```
+
+<br>
+
+**What You See**: The two curves are practically on top of each other. You'd need a magnifying glass to spot the difference! This is WAY too small for any statistical test to detect.
+
+<br>
+
+## Scenario 2: Small but Noticeable Difference (Still Not Enough)
+
+Now let's look at our original 1.7-point difference again, but this time with the distribution view.
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-height: 8
+
+# Back to original scenario
+scores_s2 <- data.frame(
+  score = c(westside_scores, eastside_scores),
+  school = rep(c("Westside", "Eastside"),
+               each = n_students))
+
+ggplot2::ggplot(data = scores_s2,
+                mapping = ggplot2::aes(x = score,
+                                       fill = school,
+                                       color = school)) +
+  ggplot2::geom_density(alpha = 0.3,
+                        linewidth = 1.5) +
+  ggplot2::geom_vline(xintercept = westside_mean,
+                      color = "#F8766D",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::geom_vline(xintercept = eastside_mean,
+                      color = "#00BFC4",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::annotate(geom = "segment",
+                    x = westside_mean,
+                    xend = eastside_mean,
+                    y = 0.025,
+                    yend = 0.025,
+                    arrow = grid::arrow(ends = "both",
+                                       length = grid::unit(0.3, "cm")),
+                    color = "darkgreen",
+                    linewidth = 1.5) +
+  ggplot2::annotate(geom = "text",
+                    x = (westside_mean + eastside_mean) / 2,
+                    y = 0.027,
+                    label = "1.7 point\ndifference",
+                    size = 5,
+                    color = "darkgreen",
+                    fontface = "bold") +
+  ggplot2::labs(
+    title = "Scenario 2: Our Original 1.7-Point Difference",
+    subtitle = "Still LOTS of overlap - not statistically significant",
+    x = "Test Score",
+    y = "Number of Students",
+    fill = "School",
+    color = "School") +
+  ggplot2::theme(legend.position = "top")
+
+```
+
+<br>
+
+**What You See**: Yes, Eastside's curve is shifted slightly to the right. But there's still massive overlap. About 94% of the students from both schools have scores that could come from either school. That's why ANOM says this difference isn't significant - it's too hard to tell the groups apart.
+
+<br>
+
+## Scenario 3: Clear Difference (NOW We're Talking!)
+
+What if the difference was 5 points AND the scores were less spread out? Now we're getting somewhere!
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-height: 8
+
+# Scenario 3: Larger difference with less spread
+west_mean_s3 <- 78.5
+east_mean_s3 <- 83.5  # 5 point difference
+sd_both_s3 <- 9.5     # Less spread
+
+# Generate scores
+west_scores_s3 <- stats::rnorm(n = n_students,
+                               mean = west_mean_s3,
+                               sd = sd_both_s3)
+east_scores_s3 <- stats::rnorm(n = n_students,
+                               mean = east_mean_s3,
+                               sd = sd_both_s3)
+
+scores_s3 <- data.frame(
+  score = c(west_scores_s3, east_scores_s3),
+  school = rep(c("Westside", "Eastside"),
+               each = n_students))
+
+# Plot
+ggplot2::ggplot(data = scores_s3,
+                mapping = ggplot2::aes(x = score,
+                                       fill = school,
+                                       color = school)) +
+  ggplot2::geom_density(alpha = 0.3,
+                        linewidth = 1.5) +
+  ggplot2::geom_vline(xintercept = west_mean_s3,
+                      color = "#F8766D",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::geom_vline(xintercept = east_mean_s3,
+                      color = "#00BFC4",
+                      linetype = "dashed",
+                      linewidth = 1) +
+  ggplot2::annotate(geom = "segment",
+                    x = west_mean_s3,
+                    xend = east_mean_s3,
+                    y = 0.035,
+                    yend = 0.035,
+                    arrow = grid::arrow(ends = "both",
+                                       length = grid::unit(0.3, "cm")),
+                    color = "darkgreen",
+                    linewidth = 1.5) +
+  ggplot2::annotate(geom = "text",
+                    x = (west_mean_s3 + east_mean_s3) / 2,
+                    y = 0.038,
+                    label = "5 point\ndifference",
+                    size = 5,
+                    color = "darkgreen",
+                    fontface = "bold") +
+  ggplot2::labs(
+    title = "Scenario 3: Clear 5-Point Difference with Less Spread",
+    subtitle = "NOW we can see these are different groups! Much less overlap.",
+    x = "Test Score",
+    y = "Number of Students",
+    fill = "School",
+    color = "School") +
+  ggplot2::theme(legend.position = "top")
+
+```
+
+<br>
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Calculate stats for scenario 3
+overall_mean_s3 <- (west_mean_s3 + east_mean_s3) / 2
+pooled_sd_s3 <- sd_both_s3
+critical_value_s3 <- stats::qt(0.975,
+                               df = n_students * 2 - 2)
+upper_limit_s3 <- overall_mean_s3 + critical_value_s3 * pooled_sd_s3 * 
+  sqrt(2 / n_students)
+lower_limit_s3 <- overall_mean_s3 - critical_value_s3 * pooled_sd_s3 * 
+  sqrt(2 / n_students)
+
+anom_df_s3 <- data.frame(
+  school = c("Westside", "Eastside"),
+  mean = c(west_mean_s3, east_mean_s3))
+
+# ANOM plot for scenario 3
+ggplot2::ggplot(data = anom_df_s3,
+                mapping = ggplot2::aes(x = school,
+                                       y = mean)) +
+  ggplot2::geom_point(size = 6,
+                      color = c("blue", "red")) +
+  ggplot2::geom_hline(yintercept = overall_mean_s3,
+                      linetype = "solid",
+                      linewidth = 1.5) +
+  ggplot2::geom_hline(yintercept = upper_limit_s3,
+                      linetype = "dashed",
+                      linewidth = 1.5,
+                      color = "red") +
+  ggplot2::geom_hline(yintercept = lower_limit_s3,
+                      linetype = "dashed",
+                      linewidth = 1.5,
+                      color = "red") +
+  ggplot2::annotate(geom = "text",
+                    x = 1.5,
+                    y = overall_mean_s3,
+                    label = "District Average",
+                    size = 6,
+                    fontface = "bold",
+                    vjust = -1) +
+  ggplot2::annotate(geom = "segment",
+                    x = 2.2,
+                    xend = 2.4,
+                    y = east_mean_s3,
+                    yend = upper_limit_s3 + 0.5,
+                    arrow = grid::arrow(length = grid::unit(0.3, "cm")),
+                    color = "red",
+                    linewidth = 1.5) +
+  ggplot2::annotate(geom = "text",
+                    x = 2.5,
+                    y = upper_limit_s3 + 0.5,
+                    label = "Eastside is ABOVE\nthe red line!\nSignificant difference!",
+                    size = 5,
+                    color = "red",
+                    fontface = "bold",
+                    hjust = 0) +
+  ggplot2::labs(
+    title = "Scenario 3 ANOM Results: SIGNIFICANT!",
+    subtitle = "Eastside falls outside the decision limits",
+    y = "Average Test Score",
+    x = "") +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 0))
+
+```
+
+<br>
+
+**What You See**: NOW the curves are clearly separated! There's much less overlap (only about 35%). Eastside's average falls outside the upper red line in the ANOM chart, which means we can confidently say this school is performing better. This difference is "statistically significant."
+
+<br>
+
+# Comparing the Three Scenarios Side by Side
+
+```{r}
+#| echo: false
+#| warning: false
+
+cohens_d_s1 <- 0.1 / sd_both_s1
+cohens_d_s2 <- (eastside_mean - westside_mean) / pooled_sd
+cohens_d_s3 <- (east_mean_s3 - west_mean_s3) / pooled_sd_s3
+
+overlap_s1 <- 2 * stats::pnorm(-abs(cohens_d_s1) / 2) * 100
+overlap_s2 <- 2 * stats::pnorm(-abs(cohens_d_s2) / 2) * 100
+overlap_s3 <- 2 * stats::pnorm(-abs(cohens_d_s3) / 2) * 100
+
+comparison_df <- data.frame(
+  "Scenario" = c(
+    "1: Tiny Difference",
+    "2: Small Difference (Our Original)",
+    "3: Clear Difference"),
+  "Difference in Averages" = c("0.1 points", "1.7 points", "5.0 points"),
+  "How Spread Out Scores Are" = c("Very spread (SD=12)", 
+                                   "Very spread (SD=12)", 
+                                   "Less spread (SD=9.5)"),
+  "Percent Overlap" = c(
+    paste0(round(overlap_s1, 0), "%"),
+    paste0(round(overlap_s2, 0), "%"),
+    paste0(round(overlap_s3, 0), "%")),
+  "Can We Detect It?" = c("NO", "NO", "YES!"))
+
+comparison_df |>
+  flextable::flextable() |>
+  flextable::set_header_labels(
+    Scenario = "Scenario",
+    Difference.in.Averages = "Difference in Averages",
+    How.Spread.Out.Scores.Are = "How Spread Out Scores Are",
+    Percent.Overlap = "Percent Overlap",
+    Can.We.Detect.It. = "Can We Detect It?") |>
+  flextable::theme_booktabs() |>
+  flextable::width(j = 1, width = 2) |>
+  flextable::width(j = 2:5, width = 1.5) |>
+  flextable::align(align = "center", part = "body") |>
+  flextable::align(align = "left", j = 1, part = "body") |>
+  flextable::bold(part = "header") |>
+  flextable::bg(i = 3, bg = "#90EE90", part = "body") |>
+  flextable::bold(i = 3, j = 5, part = "body")
+
+```
+
+<br>
+
+**The Big Lessons**:
+
+1. **Size matters, but so does spread**: A 1.7-point difference seems bigger than 0.1, but it's still too small compared to how spread out the scores are.
+
+2. **The magic formula**: To detect a difference, you need either:
+   - A bigger difference in averages, OR
+   - Less spread in the scores, OR
+   - Both!
+
+3. **Overlap tells the story**: When 94% of scores overlap (Scenario 2), the groups are too similar to call different. When only 35% overlap (Scenario 3), now we're seeing truly different groups.
+
+<br>
+
+# A Special Case: Working with Percentages
+
+Sometimes we're not looking at test scores but at pass rates (like "What percent of students passed?"). This requires a slightly different approach.
+
+Let's say:
+- Westside: 78.5% of students passed
+- Eastside: 80.2% of students passed
+
+When working with percentages, especially when they're very high or very low, we need to use something called an "arcsine transformation." Don't worry about the math - just understand WHY we need it.
+
+<br>
+
+## Why Percentages Are Tricky
+
+Imagine two scenarios:
+
+**Scenario A**: 
+- School 1: 10% pass rate
+- School 2: 15% pass rate  
+- Difference: 5 percentage points
+
+**Scenario B**:
+- School 1: 50% pass rate
+- School 2: 55% pass rate
+- Difference: 5 percentage points
+
+Even though both have a 5-point difference, they're NOT the same! Going from 10% to 15% is a 50% improvement, while going from 50% to 55% is only a 10% improvement.
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-height: 8
+
+# Create visualization of why percentages are tricky
+percent_data <- data.frame(
+  percentage = seq(0.01, 0.99, by = 0.01))
+
+percent_data$variance <- percent_data$percentage * (1 - percent_data$percentage)
+
+ggplot2::ggplot(data = percent_data,
+                mapping = ggplot2::aes(x = percentage,
+                                       y = variance)) +
+  ggplot2::geom_line(linewidth = 2,
+                     color = "darkblue") +
+  ggplot2::geom_area(alpha = 0.3,
+                     fill = "lightblue") +
+  ggplot2::annotate(geom = "segment",
+                    x = 0.10,
+                    xend = 0.15,
+                    y = 0.09,
+                    yend = 0.09,
+                    arrow = grid::arrow(ends = "both",
+                                       length = grid::unit(0.3, "cm")),
+                    color = "red",
+                    linewidth = 1.5) +
+  ggplot2::annotate(geom = "text",
+                    x = 0.125,
+                    y = 0.10,
+                    label = "5% difference\nhas LESS variability",
+                    size = 5,
+                    color = "red") +
+  ggplot2::annotate(geom = "segment",
+                    x = 0.50,
+                    xend = 0.55,
+                    y = 0.25,
+                    yend = 0.25,
+                    arrow = grid::arrow(ends = "both",
+                                       length = grid::unit(0.3, "cm")),
+                    color = "darkgreen",
+                    linewidth = 1.5) +
+  ggplot2::annotate(geom = "text",
+                    x = 0.525,
+                    y = 0.26,
+                    label = "Same 5% difference\nhas MORE variability",
+                    size = 5,
+                    color = "darkgreen") +
+  ggplot2::scale_x_continuous(labels = scales::percent_format()) +
+  ggplot2::labs(
+    title = "Why Percentages Need Special Treatment",
+    subtitle = "Variability changes depending on where you are on the percentage scale",
+    x = "Percentage (Pass Rate)",
+    y = "Amount of Variability") +
+  ggplot2::theme(legend.position = "none")
+
+```
+
+<br>
+
+**What This Shows**: The curve peaks at 50% - that's where percentages have the most variability. Near 0% or 100%, there's less variability. This uneven variability is why we need the special transformation.
+
+<br>
+
+## When to Use the Special Transformation
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Example with moderate proportions (transformation not critical)
+prop1_mod <- 0.45
+prop2_mod <- 0.50
+
+# Example with extreme proportions (transformation critical)
+prop1_ext <- 0.05
+prop2_ext <- 0.08
+
+# Calculate for both methods
+standard_mod <- c(prop1_mod, prop2_mod)
+arcsin_mod <- sin(asin(sqrt(standard_mod)))^2
+
+standard_ext <- c(prop1_ext, prop2_ext)
+arcsin_ext <- sin(asin(sqrt(standard_ext)))^2
+
+method_guide <- data.frame(
+  "Percentage Range" = c(
+    "15% to 85%",
+    "Below 15% or Above 85%"),
+  "Example" = c(
+    "45% vs 50% pass rate",
+    "5% vs 8% pass rate"),
+  "Which Method?" = c(
+    "Either method works fine",
+    "MUST use arcsine transformation"),
+  "Why?" = c(
+    "Variability is fairly constant",
+    "Variability changes too much; regular methods give wrong answers"))
+
+method_guide |>
+  flextable::flextable() |>
+  flextable::set_header_labels(
+    Percentage.Range = "Percentage Range",
+    Example = "Example",
+    Which.Method. = "Which Method?",
+    Why. = "Why?") |>
+  flextable::theme_booktabs() |>
+  flextable::width(j = 1, width = 1.5) |>
+  flextable::width(j = 2:4, width = 2) |>
+  flextable::align(align = "left", part = "all") |>
+  flextable::bold(part = "header") |>
+  flextable::bg(i = 2, bg = "#FFE4B5", part = "body")
+
+```
+
+<br>
+
+**Rule of Thumb**: 
+- If your percentages are between 15% and 85%, you're probably fine with regular methods
+- If your percentages are very low (below 15%) or very high (above 85%), use the arcsine transformation
+
+<br>
+
+# Bringing It All Together: The Story's Conclusion
+
+We started with a simple question: Is Eastside School really performing better than Westside School?
+
+Through our journey, we learned:
+
+1. **Averages alone don't tell the whole story** - We need to look at how much the distributions overlap
+
+2. **Small differences are hard to detect** - A 1.7-point difference might seem real, but with lots of spread in the data, it could easily be random chance
+
+3. **Size AND spread both matter** - To confidently say groups are different, you need:
+   - A large enough difference in averages
+   - Low enough variability in the data
+   - Or ideally, both!
+
+4. **Visual understanding is key** - Looking at the actual distribution curves helps us understand what the numbers really mean
+
+5. **Percentages need special care** - When working with very high or very low percentages, use the arcsine transformation
+
+<br>
+
+## The Final Wisdom
+
+The next time someone shows you two averages and claims one group is "better" than another, ask yourself:
+
+- **How much do the distributions overlap?** If they overlap a lot, the difference might not be meaningful.
+
+- **How spread out is the data?** More spread means you need a bigger difference to be confident.
+
+- **Is the difference practically important?** Even a statistically significant difference might not matter in the real world, and vice versa.
+
+Remember: **Statistics helps us separate signal from noise. The signal is the real difference; the noise is random variation. Our job is to figure out which is which.**
+
+<br>
+
+---
+
+*"In God we trust. All others must bring data." - W. Edwards Deming*
+
+*"But bring context with that data too!" - Every good statistician*
