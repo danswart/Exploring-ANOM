@@ -129,86 +129,88 @@ options(tigris_use_cache = TRUE)
 
 # load libraries
 
-# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
-# library(tibble) # Simple Data Frames
-# library(tidyr) # Tidy Messy Data
-# library(readr) # Read Rectangular Text Data
-# library(purrr) # Functional Programming Tools
-# library(dplyr) # A Grammar of Data Manipulation
-# library(stringr) # Simple, Consistent Wrappers for Common String Operations
-# library(forcats) # Tools for Working with Categorical Variables (Factors)
-# library(lubridate) # Make Dealing with Dates a Little Easier
-# library(readxl) # Read Excel Files
-# library(writexl) # Export Data Frames to Excel 'xlsx' Format 
-# library(janitor) # Simple Tools for Examining and Cleaning Dirty Data 
-# library(ggtext) # Improved Text Rendering Support for 'ggplot2' 
-# library(paletteer) # Comprehensive Collection of Color Palettes 
-# library(viridis) # Colorblind-Friendly Color Maps for R 
-# library(RColorBrewer) # ColorBrewer Palettes 
-# library(wesanderson) # A Wes Anderson Palette Generator 
-# library(dutchmasters) # Color Palettes based on Famous Paintings 
-# library(gghighlight) # Highlight Lines and Points in 'ggplot2' 
-# library(monochromeR) # Easily Create, View and Use Monochrome Color Palettes 
-# library(ggforce) # Accelerating 'ggplot2' 
-# library(ggthemes) # Extra Themes, Scales and Geoms for 'ggplot2'
-# library(gt) # Easily Create Presentation-Ready Display Tables
-# library(gtExtras) # Extending 'gt' for Beautiful HTML Tables
-# library(plotly) # Create Interactive Web Graphics via 'plotly.js'
-# library(patchwork) # The Composer of Plots
-# library(ppcor) # Partial and Semi-Partial (Part) Correlation
-# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
-# library(corrplot) # Visualization of a Correlation Matrix
-# library(ggcorrplot) # Visualization of a Correlation Matrix using 'ggplot2'
-# library(car) # Companion to Applied Regression
-# library(WRS2) # A Collection of Robust Statistical Methods
-# library(boot) # Bootstrap Functions
-# library(BayesFactor) # Computation of Bayes Factors for Common Designs
-# library(pwr) # Basic Functions for Power Analysis
-# library(qgraph) # Graph Plotting Methods, Psychometric Data Visualization and Graphical Model Estimation
-# library(scales) # Scale Functions for Visualization
-# library(here) # A Simpler Way to Find Your Files
-# library(ggdag) # Analyze and Create Elegant Directed Acyclic Graphs      
-# library(dagitty) # Graphical Analysis of Structural Causal Models    
-# library(DiagrammeR) # Graph/Network Visualization 
-# library(knitr) # A General-Purpose Package for Dynamic Report Generation in R     
-# library(kableExtra) # Construct Complex Table with 'kable' and Pipe Syntax
-# library(flextable) # Functions for Tabular Reporting  
-# library(lavaan) # Latent Variable Analysis     
-# library(ggpubr) # 'ggplot2' Based Publication Ready Plots
-# library(rethinking) # Statistical Rethinking book package
-# library(broom) # Convert Statistical Objects into Tidy Tibbles
-# library(tidycensus) # Load US Census Boundary and Attribute Data as 'tidyverse' and 'sf'-Ready Data Frames
 
 
 # Force dplyr's select to take precedence
 select <- dplyr::select
 filter <- dplyr::filter
 
+
 # Set global theme for consistent plots
-ggplot2::theme_set(ggplot2::theme_minimal(base_size = 20) + 
-                   ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
-                                                                      size = 26),
-                                  plot.subtitle = ggplot2::element_text(face = "bold",
-                                                                         size = 24),
-                                  axis.title.x = ggplot2::element_text(face = "bold",
-                                                                        size = 22),
-                                  axis.title.y = ggplot2::element_text(face = "bold",
-                                                                        size = 22),
-                                  axis.text.x = ggplot2::element_text(face = "bold",
-                                                                       size = 22,
-                                                                       angle = 45,
-                                                                       hjust = 1),
-                                  legend.position = "bottom",
-                                  strip.text = ggplot2::element_text(face = "bold"),
-                                  panel.spacing.x = grid::unit(1.5,
-                                                                "cm"),
-                                  panel.spacing.y = grid::unit(1.5,
-                                                                "cm"),
-                                  plot.margin = ggplot2::margin(20,
-                                                                 20,
-                                                                 20,
-                                                                 20,
-                                                                 "pt")))
+ggplot2::theme_set(
+  ggplot2::theme_minimal(base_size = 20) + 
+    ggplot2::theme(
+      axis.text.x = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 22,
+        angle = 45,
+        hjust = 1),
+      axis.title.y = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 22),
+      plot.title.position = "plot",
+      plot.title = ggtext::element_textbox_simple(
+        family = "Cabin",
+        face = "bold",
+        color = "darkgreen",
+        size = 26,
+        fill = "yellow",
+        lineheight = 1.0,
+        padding = ggplot2::margin(5.5, 5.5, 0.0, 5.5),
+        margin = ggplot2::margin(0, 0, 5.5, 0)
+      ),
+      plot.subtitle = ggtext::element_textbox_simple(
+        family = "Cabin",
+        color = "darkgreen",
+        face = "bold",
+        size = 24,
+        fill = "yellow",
+        lineheight = 1.0,
+        padding = ggplot2::margin(0.0, 5.5, 5.5, 5.5),
+        margin = ggplot2::margin(0, 0, 5.5, 0)
+      ),
+      plot.caption = ggtext::element_markdown(
+        family = "Cabin",
+        size = 16,
+        hjust = 1,
+        color = "darkblue",
+        face = "italic",
+        fill = "yellow",
+        lineheight = 1.0
+      ),
+      strip.text = ggtext::element_markdown(
+        family = "Cabin",
+        color = "orange",
+        size = ggplot2::rel(1.1),
+        face = "italic",
+        margin = ggplot2::margin(2, 
+                                 0, 
+                                 0.5,
+                                 0,
+                                 "lines")),
+      axis.text = ggtext::element_markdown(
+        family = "Cabin",
+        color = "black"),
+      panel.background = ggplot2::element_rect(fill = "white", color = NA),
+      plot.background = ggplot2::element_rect(fill = "white", color = NA),
+      legend.position = "bottom",
+      panel.spacing.x = grid::unit(1.5,
+                                   "cm"),
+      panel.spacing.y = grid::unit(1.5,
+                                   "cm"),
+      plot.margin = ggplot2::margin(20,
+                                    20,
+                                    20,
+                                    20,
+                                    "pt")
+  )
+)
+
+
 
 
 # Set seed for reproducibility
@@ -393,8 +395,7 @@ ggplot2::ggplot(data = anom_df,
     subtitle = "Both schools are between the red lines, so NO significant difference",
     y = "Average Test Score",
     x = "") +
-  ggplot2::theme(legend.position = "none",
-                 axis.text.x = ggplot2::element_text(angle = 0))
+  ggplot2::theme(legend.position = "none")
 
 ```
 
@@ -708,8 +709,8 @@ ggplot2::ggplot(data = anom_df_s3,
     title = "Scenario 3 ANOM Results: SIGNIFICANT!",
     subtitle = "Eastside falls outside the decision limits",
     y = "Average Test Score",
-    x = "") +
-  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 0))
+    x = "") 
+
 
 ```
 
