@@ -24,7 +24,15 @@ format:
     code-block-bg: "#FAEBD7"
     code-block-border-left: "#31BAE9"
     embed-resources: true
-    include-in-header: header.html
+    include-in-header:
+      - text: 
+          <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Cabin&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
+      - header.html
     css:
       - swart.css
       - tachyons.min.css
@@ -53,8 +61,10 @@ format:
       x: 1in
       y: 1in
     toc: true
-    fontsize: 14pt
+    fontsize: 16pt
     mainfont: "Cabin"
+  
+
     
   revealjs:
     slide-number: true
@@ -88,7 +98,7 @@ quarto:
 
 # for .qmd filesd
 execute:
-  echo: false
+  echo: true
   message: false
   warning: false
   eval: true
@@ -99,11 +109,12 @@ execute:
 # for .rmd files
 knitr:
   opts_chunk:
-    echo: false
+    echo: true
     error: false
     warning: false
     message: false
     cache: false
+
 
 ---
 
@@ -111,108 +122,148 @@ knitr:
 ```{r}
 #| label: setup
 #| include: false
-# R version 4.4.3 (2025-02-28)
-# Platform: x86_64-apple-darwin20
-# Running under: macOS Sequoia 15.6.1
-# Rstudio 2025.9.2.418 (Cucumberleaf Sunflower)
-# 
 
-# Prevent scientific notation globally
-options(scipen = 999)
-options(device = "quartz")  # macOS native graphics device
-options(tigris_use_cache = TRUE)
 
 # install.packages(c("mapview", "survey", "srvyr", "arcgislayers"))
 
 # census_api_key("95496766c51541ee6f402c1e1a8658581285b759", install = TRUE, overwrite = TRUE)
 
 
-# load libraries
-
-# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
-# library(tibble) # Simple Data Frames
-# library(tidyr) # Tidy Messy Data
-# library(readr) # Read Rectangular Text Data
-# library(purrr) # Functional Programming Tools
-# library(dplyr) # A Grammar of Data Manipulation
-# library(stringr) # Simple, Consistent Wrappers for Common String Operations
-# library(forcats) # Tools for Working with Categorical Variables (Factors)
-# library(lubridate) # Make Dealing with Dates a Little Easier
-# library(readxl) # Read Excel Files
-# library(writexl) # Export Data Frames to Excel 'xlsx' Format 
-# library(janitor) # Simple Tools for Examining and Cleaning Dirty Data 
-# library(ggtext) # Improved Text Rendering Support for 'ggplot2' 
-# library(paletteer) # Comprehensive Collection of Color Palettes 
-# library(viridis) # Colorblind-Friendly Color Maps for R 
-# library(RColorBrewer) # ColorBrewer Palettes 
-# library(wesanderson) # A Wes Anderson Palette Generator 
-# library(dutchmasters) # Color Palettes based on Famous Paintings 
-# library(gghighlight) # Highlight Lines and Points in 'ggplot2' 
-# library(monochromeR) # Easily Create, View and Use Monochrome Color Palettes 
-# library(ggforce) # Accelerating 'ggplot2' 
-# library(ggthemes) # Extra Themes, Scales and Geoms for 'ggplot2'
-# library(gt) # Easily Create Presentation-Ready Display Tables
-# library(gtExtras) # Extending 'gt' for Beautiful HTML Tables
-# library(plotly) # Create Interactive Web Graphics via 'plotly.js'
-# library(patchwork) # The Composer of Plots
-# library(ppcor) # Partial and Semi-Partial (Part) Correlation
-# library(ggplot2) # Create Elegant Data Visualizations Using the Grammar of Graphics
-# library(corrplot) # Visualization of a Correlation Matrix
-# library(ggcorrplot) # Visualization of a Correlation Matrix using 'ggplot2'
-# library(car) # Companion to Applied Regression
-# library(WRS2) # A Collection of Robust Statistical Methods
-# library(boot) # Bootstrap Functions
-# library(BayesFactor) # Computation of Bayes Factors for Common Designs
-# library(pwr) # Basic Functions for Power Analysis
-# library(qgraph) # Graph Plotting Methods, Psychometric Data Visualization and Graphical Model Estimation
-# library(scales) # Scale Functions for Visualization
-# library(here) # A Simpler Way to Find Your Files
-# library(ggdag) # Analyze and Create Elegant Directed Acyclic Graphs      
-# library(dagitty) # Graphical Analysis of Structural Causal Models    
-# library(DiagrammeR) # Graph/Network Visualization 
-# library(knitr) # A General-Purpose Package for Dynamic Report Generation in R     
-# library(kableExtra) # Construct Complex Table with 'kable' and Pipe Syntax
-# library(flextable) # Functions for Tabular Reporting  
-# library(lavaan) # Latent Variable Analysis     
-# library(ggpubr) # 'ggplot2' Based Publication Ready Plots
-# library(rethinking) # Statistical Rethinking book package
-# library(broom) # Convert Statistical Objects into Tidy Tibbles
-# library(tidycensus) # Load US Census Boundary and Attribute Data as 'tidyverse' and 'sf'-Ready Data Frames
+# # load libraries - NOT NEEDED
 
 
 # Force dplyr's select to take precedence
 select <- dplyr::select
 filter <- dplyr::filter
 
+# Options
+options(scipen = 999)
+options(qic.clshade = T) # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.linecol = 'black') # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.signalcol = "firebrick") # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.targetcol = "purple") # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(DT.options = list(dom = 'pBlfrti')) # Add buttons, filtering, and top (t) pagination controls
+options(shiny.maxRequestSize = 50 * 1024^2) # Set upload maximum to 50 MB
+options(tigris_use_cache = TRUE)
+
+
+flextable::set_flextable_defaults(
+  font.size = 14, 
+  font.family = "Cabin",
+  font.color = "black",
+  table.layout = "fixed",
+  border.color = "darkgray",
+  padding.top = 3, padding.bottom = 3,
+  padding.left = 4, padding.right = 4,
+  line_spacing = 1.3,
+  digits = 2,
+  decimal.mark = ",",
+  big.mark = " ",
+  na_str = "<na>")
+
+  # flextable::theme_alafoli()	|>  # BLAH
+  # flextable::theme_apa()  # THIS IS NICE
+  # flextable::theme_booktabs() |>  # NICE, MORE COMPACT
+  # flextable::theme_box() |>   # OK, INCLUDES CELL BORDERS
+  # flextable::theme_tron() |>  # 'DARK MODE' BLUE TEXT
+  # flextable::theme_tron_legacy() |>   # 'DARK MODE' YELLOW TEXT
+  # flextable::theme_vader() |>    # 'DARK MODE' WHITE TEXT
+  # flextable::theme_vanilla() |>   # NOT SPECIAL
+  # flextable::theme_zebra()	|>
+  #
+  # flextable::bg(bg = "palegreen", part = "body)
+  # flextable::bg(i = base::nrow(stats_df), bg = "yellow", part = "body")  OR
+  # lextable::bg(i = ~ significant == "Yes", bg = "yellow", part = "body") |> 
+
+
 # Set global theme for consistent plots
-ggplot2::theme_set(ggplot2::theme_minimal(base_size = 20) + 
-                   ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
-                                                                      size = 26),
-                                  plot.subtitle = ggplot2::element_text(face = "bold",
-                                                                         size = 24),
-                                  axis.title.x = ggplot2::element_text(face = "bold",
-                                                                        size = 22),
-                                  axis.title.y = ggplot2::element_text(face = "bold",
-                                                                        size = 22),
-                                  axis.text.x = ggplot2::element_text(face = "bold",
-                                                                       size = 22,
-                                                                       angle = 45,
-                                                                       hjust = 1),
-                                  legend.position = "bottom",
-                                  strip.text = ggplot2::element_text(face = "bold"),
-                                  panel.spacing.x = grid::unit(1.5,
-                                                                "cm"),
-                                  panel.spacing.y = grid::unit(1.5,
-                                                                "cm"),
-                                  plot.margin = ggplot2::margin(20,
-                                                                 20,
-                                                                 20,
-                                                                 20,
-                                                                 "pt")))
+ggplot2::theme_set(
+  ggplot2::theme_minimal(base_size = 20) +
+    ggplot2::theme(
+      plot.title.position = "plot",
+      plot.title = ggtext::element_textbox_simple(
+        family = "Cabin",
+        face = "bold",
+        color = "darkgreen",
+        size = 26,
+        fill = "yellow",
+        lineheight = 1.2,
+        padding = ggplot2::margin(5.5, 5.5, 0.0, 5.5),
+        margin = ggplot2::margin(0, 0, 5.5, 0)
+      ),
+      plot.subtitle = ggtext::element_textbox_simple(
+        family = "Cabin",
+        color = "darkgreen",
+        face = "bold",
+        size = 24,
+        fill = "yellow",
+        lineheight = 1.2,
+        padding = ggplot2::margin(5.5, 5.5, 5.5, 5.5),
+        margin = ggplot2::margin(10.5, 0, 5.5, 0)
+      ),
+      plot.caption = ggtext::element_markdown(
+        family = "Cabin",
+        size = 22,
+        hjust = 1,
+        color = "darkblue",
+        face = "italic",
+        fill = "yellow",
+        lineheight = 1.0
+      ),
+      axis.text.x = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 16,
+        angle = 45,
+        hjust = 1
+      ),
+        # ggplot2::element_blank(),
+      axis.title.x = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20),
+        # ggplot2::element_blank(),
+      axis.text.y = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20,
+        angle = 45,
+        hjust = 1
+      ),
+        # ggplot2::element_blank(),
+      axis.title.y = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20),
+        # ggplot2::element_blank(),
+      strip.text = ggtext::element_markdown(
+        family = "Cabin",
+        color = "black",
+        size = ggplot2::rel(1.1),
+        face = "italic",
+        margin = ggplot2::margin(2, 0, 0.5, 0, "lines")
+      ),
+      axis.text = ggtext::element_markdown(
+        family = "Cabin",
+        color = "black"),
+      panel.background = ggplot2::element_rect(fill = "white", color = NA),
+      plot.background = ggplot2::element_rect(fill = "white", color = NA),
+      legend.position = "none",
+      panel.spacing.x = grid::unit(1.5, "cm"),
+      panel.spacing.y = grid::unit(1.5, "cm"),
+      plot.margin = ggplot2::margin(20, 20, 20, 20, "pt")
+    )
+)
 
 
+
+  
 # Set seed for reproducibility
-set.seed(123)
+base::set.seed(123)
 
 ```
 
@@ -317,25 +368,24 @@ ggplot2::ggplot(data = anom_df,
                       linetype = "dashed") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean + 1,
+                    y = overall_mean + .25,
                     label = paste("Overall Mean =",
                                   round(overall_mean,
                                         2))) +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = upper_decision_limit + 1,
+                    y = upper_decision_limit + .25,
                     label = "Upper Decision Limit") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = lower_decision_limit - 1,
+                    y = lower_decision_limit - .25,
                     label = "Lower Decision Limit") +
   ggplot2::scale_color_manual(values = c("black",
                                          "red")) +
   ggplot2::labs(title = "Analysis of Means (ANOM)",
                 subtitle = "Comparing Male and Female Score Means to Overall Mean",
                 y = "Mean Score",
-                x = "Group") +
-  ggplot2::theme(legend.position = "none")
+                x = "Group") 
 
 # Function to calculate overlap coefficient from Cohen's d
 calculate_overlap <- function(d) {
@@ -386,11 +436,13 @@ stats_df |>
   flextable::flextable() |>
   flextable::set_header_labels(statistic = "Statistic",
                                 value = "Value") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
-  flextable::bold(part = "header")
+  flextable::bold(part = "header") |>
+  flextable::bg(i = base::nrow(stats_df), bg = "yellow", part = "body") |>
+  flextable::bg(bg = "palegreen", part = "header")
 ```
 
 <br>
@@ -485,8 +537,7 @@ ggplot2::ggplot(data = anom_df,
   ggplot2::labs(title = "ANOM for Proportions using Arcsine Transformation",
                 subtitle = "Comparing Male and Female Proportions to Overall Proportion",
                 y = "Proportion",
-                x = "Group") +
-  ggplot2::theme(legend.position = "none")
+                x = "Group") 
 
 ```
 
@@ -532,11 +583,13 @@ stats_df |>
   flextable::flextable() |>
   flextable::set_header_labels(statistic = "Statistic",
                                 value = "Value") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
-  flextable::bold(part = "header")
+  flextable::bold(part = "header") |>
+  flextable::bg(i = base::nrow(stats_df), bg = "yellow", part = "body") |>
+  flextable::bg(bg = "#90ee90", part = "header")
 
 ```
 <br>
@@ -613,26 +666,24 @@ ggplot2::ggplot(data = anom_df_s1,
                       linetype = "dashed") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean_s1 + 0.5,
+                    y = overall_mean_s1 + 0.25,
                     label = paste("Overall Mean =",
                                   round(overall_mean_s1,
                                         2))) +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = upper_limit_s1 + 0.5,
+                    y = upper_limit_s1 + 0.25,
                     label = "Upper Limit") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = lower_limit_s1 - 0.5,
+                    y = lower_limit_s1 - 0.25,
                     label = "Lower Limit") +
   ggplot2::scale_color_manual(values = c("black",
                                          "red")) +
   ggplot2::labs(title = "Scenario 1: Small Effect (Cohen's d ≈ 0.01)",
                 subtitle = "Difference of 0.1 points - Not Detectable",
                 y = "Mean Score",
-                x = "Group") +
-  ggplot2::theme(legend.position = "none")
-
+                x = "Group") 
 ```
 
 <br>
@@ -673,11 +724,13 @@ scenario1_stats |>
   flextable::flextable() |>
   flextable::set_header_labels(statistic = "Parameter",
                                 value = "Value") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
-  flextable::bold(part = "header")
+  flextable::bold(part = "header") |>
+  flextable::bg(i = base::nrow(scenario1_stats), bg = "yellow", part = "body") |>
+  flextable::bg(bg = "#90ee90", part = "header")
 
 ```
 
@@ -749,26 +802,24 @@ ggplot2::ggplot(data = anom_df_s2,
                       linetype = "dashed") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean_s2 + 0.5,
+                    y = overall_mean_s2 + 0.25,
                     label = paste("Overall Mean =",
                                   round(overall_mean_s2,
                                         2))) +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = upper_limit_s2 + 0.5,
+                    y = upper_limit_s2 + 0.25,
                     label = "Upper Limit") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = lower_limit_s2 - 0.5,
+                    y = lower_limit_s2 - 0.25,
                     label = "Lower Limit") +
   ggplot2::scale_color_manual(values = c("black",
                                          "red")) +
   ggplot2::labs(title = "Scenario 2: Moderate Effect (Cohen's d ≈ 0.14)",
                 subtitle = "Difference of 1.7 points - Still Not Detectable",
                 y = "Mean Score",
-                x = "Group") +
-  ggplot2::theme(legend.position = "none")
-
+                x = "Group")
 ```
 
 <br>
@@ -809,11 +860,13 @@ scenario2_stats |>
   flextable::flextable() |>
   flextable::set_header_labels(statistic = "Parameter",
                                 value = "Value") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
-  flextable::bold(part = "header")
+  flextable::bold(part = "header") |> 
+  flextable::bg(i = base::nrow(scenario2_stats), bg = "yellow", part = "body") |>
+  flextable::bg(bg = "#90ee90", part = "header")
 
 ```
 
@@ -885,26 +938,24 @@ ggplot2::ggplot(data = anom_df_s3,
                       linetype = "dashed") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean_s3 + 0.5,
+                    y = overall_mean_s3 + 0.25,
                     label = paste("Overall Mean =",
                                   round(overall_mean_s3,
                                         2))) +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = upper_limit_s3 + 0.5,
+                    y = upper_limit_s3 + 0.25,
                     label = "Upper Limit") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = lower_limit_s3 - 0.5,
+                    y = lower_limit_s3 - 0.25,
                     label = "Lower Limit") +
   ggplot2::scale_color_manual(values = c("black",
                                          "red")) +
   ggplot2::labs(title = "Scenario 3: Large Effect (Cohen's d ≈ 0.53)",
                 subtitle = "Difference of 5 points with reduced variability - SIGNIFICANT",
                 y = "Mean Score",
-                x = "Group") +
-  ggplot2::theme(legend.position = "none")
-
+                x = "Group")
 ```
 
 <br>
@@ -945,11 +996,13 @@ scenario3_stats |>
   flextable::flextable() |>
   flextable::set_header_labels(statistic = "Parameter",
                                 value = "Value") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
-  flextable::bold(part = "header")
+  flextable::bold(part = "header") |> 
+  flextable::bg(i = base::nrow(scenario3_stats), bg = "yellow", part = "body") |>
+  flextable::bg(bg = "#90ee90", part = "header")
 
 ```
 
@@ -998,7 +1051,7 @@ comparison_df |>
                                 pooled_sd = "Pooled SD",
                                 cohens_d = "Cohen's d",
                                 significant = "Significant?") |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "center",
                    part = "body") |>
@@ -1007,8 +1060,9 @@ comparison_df |>
                    part = "body") |>
   flextable::bold(part = "header") |>
   flextable::bg(i = ~ significant == "Yes",
-                bg = "#90EE90",
-                part = "body")
+                bg = "yellow",
+                part = "body") |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -1085,14 +1139,15 @@ method_compare_case1 |>
                                 value = "Value") |>
   flextable::colformat_double(j = "value",
                                digits = 4) |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
   flextable::bold(part = "header") |>
   flextable::add_header_row(values = c("",
                                        "Case 1: Moderate Proportions (p ≈ 0.45-0.50)"),
-                             colwidths = c(1, 2))
+                             colwidths = c(1, 2)) |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -1160,7 +1215,7 @@ method_compare_case2 |>
                                 difference = "Diff from Standard") |>
   flextable::colformat_double(j = c("value", "difference"),
                                digits = 4) |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
@@ -1168,7 +1223,8 @@ method_compare_case2 |>
   flextable::add_header_row(values = c("",
                                        "",
                                        "Case 2: Extreme Proportions (p ≈ 0.05-0.08)"),
-                             colwidths = c(1, 1, 2))
+                             colwidths = c(1, 1, 2)) |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -1236,18 +1292,19 @@ method_compare_case3 |>
                                 valid = "Valid Range?") |>
   flextable::colformat_double(j = "value",
                                digits = 4) |>
-  flextable::theme_booktabs() |>
+  flextable::theme_booktabs() |>  # NICE, MORE COMPACT
   flextable::autofit() |>
   flextable::align(align = "left",
                    part = "all") |>
   flextable::bold(part = "header") |>
   flextable::bg(i = ~ valid == "NO - Negative!",
-                bg = "#FFB6C1",
+                bg = "yellow",
                 part = "body") |>
   flextable::add_header_row(values = c("",
                                        "",
                                        "Case 3: Very Extreme Proportions (p ≈ 0.01-0.03)"),
-                             colwidths = c(1, 1, 2))
+                             colwidths = c(1, 1, 2)) |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -1323,9 +1380,7 @@ ggplot2::ggplot(data = comparison_plot_df,
                 x = "Proportion",
                 y = "Standard Error",
                 color = "Method",
-                linetype = "Method") +
-  ggplot2::theme(legend.position = "bottom")
-
+                linetype = "Method") 
 ```
 
 <br>

@@ -24,7 +24,15 @@ format:
     code-block-bg: "#FAEBD7"
     code-block-border-left: "#31BAE9"
     embed-resources: true
-    include-in-header: header.html
+    include-in-header:
+      - text: 
+          <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Cabin&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
+      - header.html
     css:
       - swart.css
       - tachyons.min.css
@@ -53,8 +61,10 @@ format:
       x: 1in
       y: 1in
     toc: true
-    fontsize: 14pt
+    fontsize: 16pt
     mainfont: "Cabin"
+  
+
     
   revealjs:
     slide-number: true
@@ -88,7 +98,7 @@ quarto:
 
 # for .qmd filesd
 execute:
-  echo: false
+  echo: true
   message: false
   warning: false
   eval: true
@@ -99,11 +109,12 @@ execute:
 # for .rmd files
 knitr:
   opts_chunk:
-    echo: false
+    echo: true
     error: false
     warning: false
     message: false
     cache: false
+
 
 ---
 
@@ -111,47 +122,65 @@ knitr:
 ```{r}
 #| label: setup
 #| include: false
-# R version 4.4.3 (2025-02-28)
-# Platform: x86_64-apple-darwin20
-# Running under: macOS Sequoia 15.6.1
-# Rstudio 2025.9.2.418 (Cucumberleaf Sunflower)
-# 
 
-# Prevent scientific notation globally
-options(scipen = 999)
-options(device = "quartz")  # macOS native graphics device
-options(tigris_use_cache = TRUE)
 
 # install.packages(c("mapview", "survey", "srvyr", "arcgislayers"))
 
 # census_api_key("95496766c51541ee6f402c1e1a8658581285b759", install = TRUE, overwrite = TRUE)
 
 
-# load libraries
-
+# # load libraries - NOT NEEDED
 
 
 # Force dplyr's select to take precedence
 select <- dplyr::select
 filter <- dplyr::filter
 
+# Options
+options(scipen = 999)
+options(qic.clshade = T) # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.linecol = 'black') # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.signalcol = "firebrick") # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(qic.targetcol = "purple") # NO LONGER NEEDED; CHARTS ALL PREPARED WITH GGPLOT2 ONLY
+options(DT.options = list(dom = 'pBlfrti')) # Add buttons, filtering, and top (t) pagination controls
+options(shiny.maxRequestSize = 50 * 1024^2) # Set upload maximum to 50 MB
+options(tigris_use_cache = TRUE)
+
+
+flextable::set_flextable_defaults(
+  font.size = 14, 
+  font.family = "Cabin",
+  font.color = "black",
+  table.layout = "fixed",
+  border.color = "darkgray",
+  padding.top = 3, padding.bottom = 3,
+  padding.left = 4, padding.right = 4,
+  line_spacing = 1.3,
+  digits = 2,
+  decimal.mark = ",",
+  big.mark = " ",
+  na_str = "<na>")
+  
+  # flextable::theme_alafoli()	|>  # BLAH
+  # flextable::theme_apa()  # THIS IS NICE
+  # flextable::theme_booktabs() |>  # NICE, MORE COMPACT
+  # flextable::theme_box() |>   # OK, INCLUDES CELL BORDERS
+  # flextable::theme_tron() |>  # 'DARK MODE' BLUE TEXT
+  # flextable::theme_tron_legacy() |>   # 'DARK MODE' YELLOW TEXT
+  # flextable::theme_vader() |>    # 'DARK MODE' WHITE TEXT
+  # flextable::theme_vanilla() |>   # NOT SPECIAL
+  # flextable::theme_zebra()	|>
+  #
+  # flextable::bg(bg = "palegreen", part = "header")
+  # flextable::bg(i = 8, bg = "yellow", part = "body")   OR
+  # 
+
+
 
 # Set global theme for consistent plots
 ggplot2::theme_set(
-  ggplot2::theme_minimal(base_size = 20) + 
+  ggplot2::theme_minimal(base_size = 20) +
     ggplot2::theme(
-      axis.text.x = ggtext::element_markdown(
-        family = "Cabin",
-        face = "bold",
-        color = "blue",
-        size = 22,
-        angle = 45,
-        hjust = 1),
-      axis.title.y = ggtext::element_markdown(
-        family = "Cabin",
-        face = "bold",
-        color = "blue",
-        size = 22),
       plot.title.position = "plot",
       plot.title = ggtext::element_textbox_simple(
         family = "Cabin",
@@ -159,7 +188,7 @@ ggplot2::theme_set(
         color = "darkgreen",
         size = 26,
         fill = "yellow",
-        lineheight = 1.0,
+        lineheight = 1.2,
         padding = ggplot2::margin(5.5, 5.5, 0.0, 5.5),
         margin = ggplot2::margin(0, 0, 5.5, 0)
       ),
@@ -169,54 +198,76 @@ ggplot2::theme_set(
         face = "bold",
         size = 24,
         fill = "yellow",
-        lineheight = 1.0,
-        padding = ggplot2::margin(0.0, 5.5, 5.5, 5.5),
-        margin = ggplot2::margin(0, 0, 5.5, 0)
+        lineheight = 1.2,
+        padding = ggplot2::margin(5.5, 5.5, 5.5, 5.5),
+        margin = ggplot2::margin(10.5, 0, 5.5, 0)
       ),
       plot.caption = ggtext::element_markdown(
         family = "Cabin",
-        size = 16,
+        size = 22,
         hjust = 1,
         color = "darkblue",
         face = "italic",
         fill = "yellow",
         lineheight = 1.0
       ),
+      axis.text.x = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20,
+        angle = 45,
+        hjust = 1
+      ),
+        # ggplot2::element_blank(),
+      axis.title.x = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20),
+        # ggplot2::element_blank(),
+      axis.text.y = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20,
+        angle = 45,
+        hjust = 1
+      ),
+        # ggplot2::element_blank(),
+      axis.title.y = ggtext::element_markdown(
+        family = "Cabin",
+        face = "bold",
+        color = "blue",
+        size = 20),
+        # ggplot2::element_blank(),
       strip.text = ggtext::element_markdown(
         family = "Cabin",
-        color = "orange",
+        color = "black",
         size = ggplot2::rel(1.1),
         face = "italic",
-        margin = ggplot2::margin(2, 
-                                 0, 
-                                 0.5,
-                                 0,
-                                 "lines")),
+        margin = ggplot2::margin(2, 0, 0.5, 0, "lines")
+      ),
       axis.text = ggtext::element_markdown(
         family = "Cabin",
         color = "black"),
       panel.background = ggplot2::element_rect(fill = "white", color = NA),
       plot.background = ggplot2::element_rect(fill = "white", color = NA),
-      legend.position = "bottom",
-      panel.spacing.x = grid::unit(1.5,
-                                   "cm"),
-      panel.spacing.y = grid::unit(1.5,
-                                   "cm"),
-      plot.margin = ggplot2::margin(20,
-                                    20,
-                                    20,
-                                    20,
-                                    "pt")
-  )
+      legend.position = "none",
+      panel.spacing.x = grid::unit(1.5, "cm"),
+      panel.spacing.y = grid::unit(1.5, "cm"),
+      plot.margin = ggplot2::margin(20, 20, 20, 20, "pt")
+    )
 )
 
 
 
-
+  
 # Set seed for reproducibility
-set.seed(123)
+base::set.seed(123)
 
 ```
+
 
 
 
@@ -224,8 +275,8 @@ set.seed(123)
 
 Imagine you're a school principal looking at test scores from two schools in your district: 
 
-- **Westside School** (where mostly boys attend): Average score of 78.5
-- **Eastside School** (where mostly girls attend): Average score of 80.2
+- **Westside School** (where only boys attend): Average score of 78.5
+- **Eastside School** (where only girls attend): Average score of 80.2
 
 **The Big Question**: Is Eastside really performing better, or is this difference just due to random chance?
 
@@ -371,24 +422,21 @@ ggplot2::ggplot(data = anom_df,
                       linetype = "dashed",
                       linewidth = 1.5,
                       color = "red") +
+  
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean + 0.5,
-                    label = paste("District Average =", round(overall_mean, 1)),
-                    size = 6,
-                    fontface = "bold") +
+                    y = overall_mean + .25,
+                    label = paste("Overall Mean =",
+                                  round(overall_mean,
+                                        2))) +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = upper_limit + 0.5,
-                    label = "If above this line,\nschool is SIGNIFICANTLY better",
-                    size = 5,
-                    color = "red") +
+                    y = upper_limit + .25,
+                    label = "Upper Decision Limit") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = lower_limit - 0.5,
-                    label = "If below this line,\nschool is SIGNIFICANTLY worse",
-                    size = 5,
-                    color = "red") +
+                    y = lower_limit - .25,
+                    label = "Lower Decision Limit") +
   ggplot2::scale_color_manual(values = c("black", "red")) +
   ggplot2::labs(
     title = "Are These Schools Really Different?",
@@ -442,8 +490,9 @@ results_df |>
   flextable::width(j = 2, width = 2) |>
   flextable::align(align = "left", part = "all") |>
   flextable::bold(part = "header") |>
-  flextable::bg(i = 8, bg = "#FFE4B5", part = "body") |>
-  flextable::bold(i = 8, part = "body")
+  flextable::bg(i = 8, bg = "yellow", part = "body") |>
+  flextable::bold(i = 8, part = "body") |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -684,27 +733,18 @@ ggplot2::ggplot(data = anom_df_s3,
                       color = "red") +
   ggplot2::annotate(geom = "text",
                     x = 1.5,
-                    y = overall_mean_s3,
-                    label = "District Average",
-                    size = 6,
-                    fontface = "bold",
-                    vjust = -1) +
-  ggplot2::annotate(geom = "segment",
-                    x = 2.2,
-                    xend = 2.4,
-                    y = east_mean_s3,
-                    yend = upper_limit_s3 + 0.5,
-                    arrow = grid::arrow(length = grid::unit(0.3, "cm")),
-                    color = "red",
-                    linewidth = 1.5) +
+                    y = overall_mean_s3 + .25,
+                    label = paste("Overall Mean =",
+                                  round(overall_mean_s3,
+                                        2))) +
   ggplot2::annotate(geom = "text",
-                    x = 2.5,
-                    y = upper_limit_s3 + 0.5,
-                    label = "Eastside is ABOVE\nthe red line!\nSignificant difference!",
-                    size = 5,
-                    color = "red",
-                    fontface = "bold",
-                    hjust = 0) +
+                    x = 1.5,
+                    y = upper_limit_s3 + .25,
+                    label = "Upper Decision Limit") +
+  ggplot2::annotate(geom = "text",
+                    x = 1.5,
+                    y = lower_limit_s3 - .25,
+                    label = "Lower Decision Limit") +
   ggplot2::labs(
     title = "Scenario 3 ANOM Results: SIGNIFICANT!",
     subtitle = "Eastside falls outside the decision limits",
@@ -763,8 +803,9 @@ comparison_df |>
   flextable::align(align = "center", part = "body") |>
   flextable::align(align = "left", j = 1, part = "body") |>
   flextable::bold(part = "header") |>
-  flextable::bg(i = 3, bg = "#90EE90", part = "body") |>
-  flextable::bold(i = 3, j = 5, part = "body")
+  flextable::bg(i = 3, bg = "yellow", part = "body") |>
+  flextable::bold(i = 3, j = 5, part = "body") |> 
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
@@ -922,7 +963,7 @@ method_guide |>
   flextable::width(j = 2:4, width = 2) |>
   flextable::align(align = "left", part = "all") |>
   flextable::bold(part = "header") |>
-  flextable::bg(i = 2, bg = "#FFE4B5", part = "body")
+  flextable::bg(bg = "palegreen", part = "header")
 
 ```
 
